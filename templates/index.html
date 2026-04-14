@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rice Variety Classifier</title>
+
+<style>
+    /* Reset */
+    body, html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* Background Video */
+    .bg-video {
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        min-width: 100%;
+        min-height: 100%;
+        object-fit: cover;
+        z-index: -1;
+    }
+
+    /* Main Container */
+    .container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(255, 255, 255, 0.92);
+        padding: 35px;
+        border-radius: 20px;
+        text-align: center;
+        width: 90%;
+        max-width: 500px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    }
+
+    h1 {
+        color: #2c3e50;
+        margin-bottom: 10px;
+        font-size: 22px;
+    }
+
+    .subtitle {
+        color: #555;
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+
+    input[type="file"] {
+        padding: 10px;
+        margin: 15px 0;
+    }
+
+    button {
+        background-color: #27ae60;
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: 0.3s;
+    }
+
+    button:hover {
+        background-color: #219150;
+    }
+
+    .prediction {
+        margin-top: 20px;
+        font-size: 20px;
+        color: #e74c3c;
+        font-weight: bold;
+    }
+
+    .confidence {
+        font-size: 16px;
+        color: #2c3e50;
+        margin-top: 5px;
+    }
+
+    .uploaded-img {
+        max-width: 100%;
+        border-radius: 10px;
+        margin-top: 15px;
+        display: none;
+    }
+
+    .result-img {
+        max-width: 100%;
+        border-radius: 10px;
+        margin-top: 15px;
+    }
+
+    .footer {
+        margin-top: 15px;
+        font-size: 12px;
+        color: #777;
+    }
+</style>
+
+</head>
+
+<body>
+<!-- Background Video -->
+<video autoplay muted loop class="bg-video">
+    <source src="{{ url_for('static', filename='video/background.mp4') }}" type="video/mp4">
+</video>
+
+<!-- Main UI -->
+<div class="container">
+
+    <h1>Rice Variety Identification</h1>
+    <div class="subtitle">
+        Deep Learning using Swin Transformer
+    </div>
+
+    <!-- Upload Form -->
+    <form method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" accept="image/*" onchange="previewImage(event)">
+        <br>
+
+        <!-- Preview Before Upload -->
+        <img id="img-preview" class="uploaded-img">
+
+        <br>
+        <button type="submit">Predict</button>
+    </form>
+
+    <!-- Show Uploaded Image After Prediction -->
+    {% if image_file %}
+        <img src="{{ url_for('static', filename='../uploads/' + image_file) }}" class="result-img">
+    {% endif %}
+
+    <!-- Prediction Output -->
+    {% if prediction %}
+        <div class="prediction">
+            Predicted Class: {{ prediction }}
+        </div>
+    {% endif %}
+
+    {% if confidence %}
+        <div class="confidence">
+            Confidence: {{ confidence }}%
+        </div>
+    {% endif %}
+
+    <div class="footer">
+        Classes: Arborio | Basmati | Ipsala | Jasmine | Karacadag
+    </div>
+
+</div>
+
+<!-- Preview Script -->
+<script>
+    function previewImage(event) {
+        const reader = new FileReader();
+        reader.onload = function() {
+            const output = document.getElementById('img-preview');
+            output.src = reader.result;
+            output.style.display = 'block';
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+</script>
+```
+
+</body>
+</html>
